@@ -1,0 +1,27 @@
+#! /bin/bash 
+
+#verification si valeur dans l'argument 
+if [ -z $0]
+
+        #si oui, alors vérifier l'existence du fichier 
+        else 
+                [ -e /Bureau/$0 ] 
+
+            # si non, alors création des dossiers+fichier 
+            then 
+                    mkdir src, test
+            then 
+                    touch README.md > "nomDeProjet's readme"
+
+            #si oui 
+            else 
+                    echo "Erreur le dossier existe déjà" 
+                    exit 
+
+        #si non, 
+        then 
+              echo "le nom n'a pas été fourni"
+                mkdir "project"
+             exit 
+
+fi 

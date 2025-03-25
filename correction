@@ -1,0 +1,41 @@
+#! /bin/bash 
+
+#######################################################################################################################################
+# version 0.0
+# pauline 
+# Descriptif : correction exercice bash22
+#######################################################################################################################################
+
+
+#vérification si valeur dans l'argument [$# -eq 0] [-z $*]
+if [ -z $1 ]
+
+        then 
+                echo "le nom du projet n'est pas fourni ce sera le nom par défaut : Project "
+                project_name="projet"
+
+        else project_name=$1 
+fi 
+
+if 
+        [ -e /Bureau/$project_name ] 
+                    
+        then 
+                echo "Erreur le dossier existe déjà" 
+                exit 1 
+fi 
+
+
+if mkdir $project_name
+
+then 
+        mkdir $project_name/src 
+        mkdir $project_name/test
+
+        echo "$project_name's readme" > "$project_name/README.md"
+        echo "$project_name created"
+        exit 0
+else 
+        echo "echec creation"
+        exit 1
+fi 
