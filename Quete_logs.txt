@@ -1,0 +1,48 @@
+
+### 1. Installation du serveur web Apache
+
+- Créer une VM debian 12 avec une carte réseaux par pont 
+
+- Mise à jour + installation d'apache2 
+sudo apt update
+sudo apt install apache2 -y
+
+- Vérification service fonctionnel 
+sudo systemctl status apache2
+
+### 2. Vérification de la configuration du logging
+
+- Aller voir le fichier de configuration du site par défaut :
+cat /etc/apache2/sites-available/000-default.conf
+
+- Repérer le nom des fichiers de log dans le systeme 
+ErrorLog ${APACHE_LOG_DIR}/error.log
+CustomLog ${APACHE_LOG_DIR}/access.log combined
+
+- Aller consulter ces fichiers de log 
+sudo nano /var/log/apache2/access.log
+sudo nano /var/log/apache2/error.log
+
+
+### 3. Générer du trafic (simuler des accès)
+
+- Requêtes valides (code 200) :
+curl http://localhost/
+curl http://127.0.0.1/
+
+- Requête non valide (code 404 - page non trouvée) :
+curl http://localhost/page-inexistante.html
+
+- Requête depuis autre machine (depuis le host) via un navigateur quelquonque 
+http://IP-Server-Apache2
+
+### 4. Analyse des logs générés
+
+- Requêtes réussies (code 200)
+grep " 200 " /var/log/apache2/access.log
+
+- Requêtes non réussies (code 404)
+grep " 404 " /var/log/apache2/access.log
+
+- Adresses IP les plus fréquentes
+awk '{print $1}' /var/log/apache2/access.log | sort | uniq -c | sort -nr | head
