@@ -38,11 +38,45 @@ http://IP-Server-Apache2
 
 ### 4. Analyse des logs générés
 
-- Requêtes réussies (code 200)
+#### Requêtes réussies (code 200)
 grep " 200 " /var/log/apache2/access.log
 
-- Requêtes non réussies (code 404)
+- Résultat obtenu
+127.0.0.1 - - [08/Jun/2025:11:42:27 +0200] "GET / HTTP/1.1" 200 10956 "-" "curl/7.88.1"
+
+- Explication 
+127.0.0.1 : L'adresse IP du client 
+- - : Champs d'identification de l'utilisateur
+[08/Jun/2025:11:42:27 +0200] : Date et heure de la requête.
+"GET / HTTP/1.1" : Méthode HTTP utilisée (GET) pour accéder à la page racine (/) du site.
+200 : Code de statut HTTP, ici 200 signifie succès.
+10956 : Taille de la réponse en octets
+"-" : Référent HTTP — ici vide, donc la requête n’a pas été déclenchée depuis un lien sur une autre page.
+"curl/7.88.1" : User-Agent, ici c’est l'outil en ligne de commande curl version 7.88.1.
+
+#### Requêtes non réussies (code 404)
 grep " 404 " /var/log/apache2/access.log
 
-- Adresses IP les plus fréquentes
+- Résultat obtenu
+192.168.1.118 - - [08/Jun/2025:11:43:23 +0200] "GET /favicon.ico HTTP/1.1" 404 491 "http://192.168.1.183/" "Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0"
+
+- Explication 
+192.168.1.118	: IP de la machine qui a tenté la connexion : ici IP machine host
+- -	Identifiants d’utilisateur (souvent non utilisés).
+[08/Jun/2025:11:43:23 +0200]	Date et heure de la requête.
+"GET /favicon.ico HTTP/1.1"	Requête HTTP : le client tente de récupérer le fichier /favicon.ico.
+404	Code HTTP : 404 Not Found, fichier introuvable.
+491	Taille de la réponse en octets
+"http://192.168.1.183/"	Référent : l’utilisateur vient de la page d’accueil du site.
+"Mozilla/5.0 (X11; Ubuntu; Linux x86_64; rv:139.0) Gecko/20100101 Firefox/139.0"
+
+#### Adresses IP les plus fréquentes
 awk '{print $1}' /var/log/apache2/access.log | sort | uniq -c | sort -nr | head
+
+- Résultat obtenu
+4 127.0.0.1
+3 192.168.1.118
+
+- Explication 
+4 requetes depuis 127.0.0.1 (depuis serveur) 
+3 requetes depuis 192.168.1.118 (depuis machine host)
